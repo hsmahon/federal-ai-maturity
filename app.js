@@ -1,10 +1,4 @@
 const STAGE_ORDER = ["Pre-deployment", "Pilot", "Deployed", "Retired"];
-const STAGE_COLORS = {
-  "Pre-deployment": "red",
-  Pilot: "yellow",
-  Deployed: "green",
-  Retired: "neutral",
-};
 const STAGE_WEIGHTS = {
   "Pre-deployment": 0,
   Pilot: 0.7,
@@ -152,23 +146,16 @@ function renderAgencyDetail() {
   const agency = getActiveAgencyView();
   const isAllAgenciesView = agency.agency === null;
   const stageCounts = agency.stage_counts;
-  const totalStageCount = STAGE_ORDER.reduce((sum, stage) => sum + (stageCounts[stage] || 0), 0);
   const title = document.querySelector("#agency-title");
   const subtitle = document.querySelector("#agency-subtitle");
 
   title.textContent = isAllAgenciesView ? "All agencies" : agency.agency_name;
-  subtitle.textContent = isAllAgenciesView
-    ? `${formatNumber(agency.total_footprint)} total footprint across ${formatNumber(state.dashboard.summary.agency_count)} agencies, individual reporting, and consolidated COTS.`
-    : `${formatNumber(agency.total_footprint)} total footprint across individual reporting and consolidated COTS.`;
+  subtitle.textContent = "";
+  subtitle.hidden = true;
 
   document.querySelector("#metric-total").textContent = formatNumber(agency.total_footprint);
-  document.querySelector("#metric-individual").textContent = formatNumber(
-    agency.individual_use_case_count,
-  );
-  document.querySelector("#metric-cots").textContent = formatNumber(agency.cots_count);
   document.querySelector("#metric-deployed").textContent = formatNumber(stageCounts.Deployed || 0);
   document.querySelector("#metric-pilot").textContent = formatNumber(stageCounts.Pilot || 0);
-  document.querySelector("#metric-pre").textContent = formatNumber(stageCounts["Pre-deployment"] || 0);
   document.querySelector("#metric-high-impact").textContent = formatNumber(
     agency.high_impact_count,
   );
@@ -185,31 +172,6 @@ function renderAgencyDetail() {
     : "This agency only reported consolidated COTS activity or no individual stage data.";
 
   renderGauge(agency);
-  renderBars(
-    document.querySelector("#stage-breakdown"),
-    STAGE_ORDER.map((stage) => ({
-      label: stage,
-      value: stageCounts[stage] || 0,
-      width: totalStageCount ? ((stageCounts[stage] || 0) / totalStageCount) * 100 : 0,
-      color: STAGE_COLORS[stage],
-    })),
-  );
-
-  const topicEntries = Object.entries(agency.topic_counts)
-    .sort((left, right) => right[1] - left[1])
-    .slice(0, 5);
-  const topicMax = topicEntries.length ? topicEntries[0][1] : 0;
-  renderBars(
-    document.querySelector("#topic-breakdown"),
-    topicEntries.length
-      ? topicEntries.map(([label, value]) => ({
-          label,
-          value,
-          width: topicMax ? (value / topicMax) * 100 : 0,
-          color: "neutral",
-        }))
-      : [{ label: "No topic data", value: 0, width: 0, color: "neutral" }],
-  );
 }
 
 function renderGauge(agency) {
@@ -237,22 +199,6 @@ function renderGauge(agency) {
     <circle cx="120" cy="126" r="18" fill="#0f1d19" stroke="rgba(232,242,238,0.12)" stroke-width="2"></circle>
     <circle cx="120" cy="126" r="8" fill="${gaugeNeedleColor(needleColor)}"></circle>
   `;
-}
-
-function renderBars(container, items) {
-  container.innerHTML = "";
-  items.forEach((item) => {
-    const row = document.createElement("div");
-    row.className = "bar-row";
-    row.innerHTML = `
-      <span>${escapeHtml(item.label)}</span>
-      <div class="bar-track">
-        <div class="bar-fill ${item.color}" style="width:${item.width}%"></div>
-      </div>
-      <strong>${formatNumber(item.value)}</strong>
-    `;
-    container.appendChild(row);
-  });
 }
 
 function renderUseCaseTable() {
@@ -316,7 +262,7 @@ function showPreviousPage() {
 }
 
 function showNextPage() {
-  const useCases = state.dashboard.use_cases[state.selectedAgency] || [];
+  const useCases = getActiveUseCases();
   const totalPages = Math.max(Math.ceil(useCases.length / PAGE_SIZE), 1);
   if (state.page < totalPages) {
     state.page += 1;

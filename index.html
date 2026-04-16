@@ -9,41 +9,63 @@
   <body>
     <main class="dashboard-shell">
       <header class="masthead">
-        <div>
+        <div class="masthead-heading">
           <p class="eyebrow">OMB 2025 Public Inventory</p>
           <h1>Federal AI Use Case Dashboard</h1>
         </div>
-        <p class="masthead-copy">
-          Agency footprint, operational maturity, and drill-down inventory built
-          from the public 2025 federal AI use case repository.
-        </p>
+        <div class="masthead-meta">
+          <div class="masthead-copy-block">
+            <p class="masthead-copy">
+              Agency footprint, operational maturity, and drill-down inventory built
+              from the
+              <a
+                href="https://github.com/ombegov/2025-Federal-Agency-AI-Use-Case-Inventory"
+                target="_blank"
+                rel="noreferrer"
+                >public 2025 federal AI use case repository</a
+              >.
+              Inspired by
+              <a href="https://github.com/karpathy/jobs" target="_blank" rel="noreferrer"
+                >Karpathy's jobs board</a
+              >.
+            </p>
+            <div class="masthead-links">
+              <a
+                class="masthead-link-button"
+                href="https://github.com/hsmahon/federal-ai-maturity"
+                target="_blank"
+                rel="noreferrer"
+                >View project repo</a
+              >
+            </div>
+          </div>
+          <div class="masthead-stats" aria-label="Inventory summary">
+            <div class="summary-item">
+              <span class="summary-label">Agencies</span>
+              <strong id="agency-count">0</strong>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">Use cases</span>
+              <strong id="use-case-count">0</strong>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">COTS</span>
+              <strong id="cots-count">0</strong>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">High-impact</span>
+              <strong id="high-impact-count">0</strong>
+            </div>
+          </div>
+        </div>
       </header>
-
-      <section class="summary-strip" aria-label="Inventory summary">
-        <div class="summary-item">
-          <span class="summary-label">Agencies</span>
-          <strong id="agency-count">0</strong>
-        </div>
-        <div class="summary-item">
-          <span class="summary-label">Individual use cases</span>
-          <strong id="use-case-count">0</strong>
-        </div>
-        <div class="summary-item">
-          <span class="summary-label">Consolidated COTS</span>
-          <strong id="cots-count">0</strong>
-        </div>
-        <div class="summary-item">
-          <span class="summary-label">High-impact use cases</span>
-          <strong id="high-impact-count">0</strong>
-        </div>
-      </section>
 
       <section class="workspace" aria-label="Agency explorer">
         <section class="treemap-panel">
           <div class="section-heading">
             <div>
               <p class="section-kicker">All agencies</p>
-              <h2>Footprint treemap</h2>
+              <h2>Footprint Treemap</h2>
             </div>
             <p class="section-note">
               Area shows total AI footprint. Color shows operational maturity.
@@ -81,31 +103,14 @@
 
           <section class="metrics-panel">
             <div class="metric"><span>Total footprint</span><strong id="metric-total">0</strong></div>
-            <div class="metric"><span>Individual use cases</span><strong id="metric-individual">0</strong></div>
-            <div class="metric"><span>Consolidated COTS</span><strong id="metric-cots">0</strong></div>
             <div class="metric"><span>Deployed</span><strong id="metric-deployed">0</strong></div>
             <div class="metric"><span>Pilot</span><strong id="metric-pilot">0</strong></div>
-            <div class="metric"><span>Pre-deployment</span><strong id="metric-pre">0</strong></div>
             <div class="metric"><span>High-impact</span><strong id="metric-high-impact">0</strong></div>
-          </section>
-
-          <section class="detail-section">
-            <div class="section-heading compact">
-              <h3>Stage mix</h3>
-            </div>
-            <div id="stage-breakdown" class="bar-list"></div>
-          </section>
-
-          <section class="detail-section">
-            <div class="section-heading compact">
-              <h3>Topic areas</h3>
-            </div>
-            <div id="topic-breakdown" class="bar-list topics"></div>
           </section>
         </aside>
       </section>
 
-      <section class="inventory-panel">
+      <section class="inventory-panel subdued">
         <div class="inventory-header">
           <div>
             <p class="section-kicker">Agency inventory</p>
@@ -142,7 +147,7 @@
 
     <script id="dashboard-data" type="application/json">{
   "summary": {
-    "generated_at": "2026-04-16T00:52:10.185949+00:00",
+    "generated_at": "2026-04-16T01:19:20.256631+00:00",
     "agency_count": 54,
     "total_individual_use_cases": 3611,
     "total_cots_use_cases": 468
