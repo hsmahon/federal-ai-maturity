@@ -177,27 +177,18 @@ function renderAgencyDetail() {
 function renderGauge(agency) {
   const svg = document.querySelector("#maturity-gauge");
   const score = agency.stage_data_available ? agency.operational_maturity_score : 0.5;
-  const angle = -90 + score * 180;
+  const markerX = 18 + score * 204;
   const needleColor = agency.stage_data_available
     ? agency.operational_maturity_bucket
     : "neutral";
 
   svg.innerHTML = `
-    <defs>
-      <filter id="needle-shadow" x="-50%" y="-50%" width="200%" height="200%">
-        <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.35)" />
-      </filter>
-    </defs>
-    <path d="M24 126 A96 96 0 0 1 80 42" fill="none" stroke="#9f3a39" stroke-width="26" stroke-linecap="round"></path>
-    <path d="M80 42 A96 96 0 0 1 160 42" fill="none" stroke="#b28528" stroke-width="26" stroke-linecap="round"></path>
-    <path d="M160 42 A96 96 0 0 1 216 126" fill="none" stroke="#2d7a4a" stroke-width="26" stroke-linecap="round"></path>
-    <path d="M36 126 A84 84 0 0 1 204 126" fill="none" stroke="rgba(10,18,16,0.92)" stroke-width="18"></path>
-    <g transform="translate(120 126) rotate(${angle})" filter="url(#needle-shadow)">
-      <path d="M-5 0 L0 -74 L5 0 Z" fill="${gaugeNeedleColor(needleColor)}"></path>
-      <path d="M-8 4 Q0 -10 8 4 L0 18 Z" fill="rgba(232,242,238,0.2)"></path>
-    </g>
-    <circle cx="120" cy="126" r="18" fill="#0f1d19" stroke="rgba(232,242,238,0.12)" stroke-width="2"></circle>
-    <circle cx="120" cy="126" r="8" fill="${gaugeNeedleColor(needleColor)}"></circle>
+    <rect x="18" y="44" width="204" height="22" fill="#15231f" stroke="#2a3a34" stroke-width="1"></rect>
+    <rect x="18" y="44" width="68" height="22" fill="#9f3a39"></rect>
+    <rect x="86" y="44" width="68" height="22" fill="#b28528"></rect>
+    <rect x="154" y="44" width="68" height="22" fill="#2d7a4a"></rect>
+    <line x1="${markerX}" y1="30" x2="${markerX}" y2="80" stroke="${gaugeNeedleColor(needleColor)}" stroke-width="3"></line>
+    <circle cx="${markerX}" cy="55" r="5" fill="#0b1513" stroke="${gaugeNeedleColor(needleColor)}" stroke-width="2"></circle>
   `;
 }
 
